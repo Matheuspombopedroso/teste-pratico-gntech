@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Tempo em Florianópolis</title>
+  <style>
+    body { font-family: sans-serif; max-width: 860px; margin: 2rem auto; }
+    button { padding: 0.6rem 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+    th, td { border-bottom: 1px solid #ddd; text-align: left; padding: 0.5rem; }
+    .erro { color: #9b1c1c; }
+  </style>
+</head>
+<body>
+  <h1>Tempo em Florianópolis</h1>
+  <p>Coordenadas: {{ latitude }}, {{ longitude }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Salvar previsão atual</button>
+  </form>
+
+  {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Quando</th>
+        <th>Descrição</th>
+        <th>Temperatura</th>
+        <th>Sensação</th>
+        <th>Umidade</th>
+        <th>Vento</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in previsoes %}
+      <tr>
+        <td>{{ item.criado_em|date:"d/m/Y H:i" }}</td>
+        <td>{{ item.descricao }}</td>
+        <td>{{ item.temperatura }} °C</td>
+        <td>{{ item.sensacao }} °C</td>
+        <td>{{ item.umidade }}%</td>
+        <td>{{ item.vento }} m/s</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">Nenhuma previsão salva ainda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
